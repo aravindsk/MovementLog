@@ -154,7 +154,7 @@ public class MovementDetailsActivity extends AppCompatActivity {
         locationEndPoint.setLatitude(Double.parseDouble(latLngList.get(0)));
         locationEndPoint.setLongitude(Double.parseDouble(latLngList.get(1)));
 
-        //test github
+        //test github what is this
 
 
         int recordGrainSplitter = 1;//time interval for which logs to be generated. In secs.
