@@ -176,7 +176,7 @@ public class MovementDetailsActivity extends AppCompatActivity {
         markerTimeStampList = new String[markerArraySize];
         polylineLatLngList = new String[exerciseLogList.size()-1];
 
-//Initialize start point - sample git test:123
+//Initialize start point - sample git test:123: checkedout SkLocaldev branch
         latLngList = Arrays.asList(exerciseLogList.get(0)._lat_lng.split(","));
         locationStartPoint.setLatitude(Double.parseDouble(latLngList.get(0)));
         locationStartPoint.setLongitude(Double.parseDouble(latLngList.get(1)));
