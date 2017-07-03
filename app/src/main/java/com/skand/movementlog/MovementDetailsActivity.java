@@ -160,6 +160,7 @@ public class MovementDetailsActivity extends AppCompatActivity {
         int recordGrainSplitter = 1;//time interval for which logs to be generated. In secs.
 
         int markerPointsCount = (int) (exerciseLogList.size()*0.05);//x% of total points
+        markerPointsCount=30;
         if(markerPointsCount<0)markerPointsCount=1;
         int markerArrayIndex = 0, markerArraySize = 0;
         Log.d("ArrSize", "exerciseLogList.size :" + exerciseLogList.size());
@@ -243,9 +244,9 @@ public class MovementDetailsActivity extends AppCompatActivity {
                 start_ts = Timestamp.valueOf(exerciseLogList.get(i)._creation_ts);
             polylineLatLngList[i-1]=exerciseLogList.get(i)._lat_lng;
 
-
+            Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  exerciseLogList.size()/ markerPointsCount:"+ exerciseLogList.size()/ markerPointsCount);
                 //set markers for map only for limited points
-                if (i% (exerciseLogList.size()/ markerPointsCount)==0  &&markerArrayIndex<=markerArraySize) {
+                if (i% ((exerciseLogList.size()-1)/ markerPointsCount)==0  &&markerArrayIndex<=markerArraySize) {
 
                     Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  markerArrayIndex:" +markerArrayIndex+" : "+ exerciseLogList.get(i)._lat_lng);
 //                    Log.d("LOCATIONDEBUG", "markerArrayIndex : " + markerArrayIndex);
