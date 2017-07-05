@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                 //write to db
-                db.addExerciseLog(new ExerciseLog(newExerciseId,newActivityId, timeForDB,currLocation, formattedDate));
+                db.addExerciseLog(new ExerciseLog(newExerciseId,newActivityId, timeForDB,currLocation,mLocation.getAccuracy(),mLocation.getTime(), formattedDate ));
                 //db.addExerciseLog(new ExerciseLog(currLocation, formattedDate));
 
 

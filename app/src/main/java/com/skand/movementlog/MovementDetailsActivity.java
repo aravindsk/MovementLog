@@ -18,7 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static android.R.id.list;
@@ -130,13 +132,9 @@ public class MovementDetailsActivity extends AppCompatActivity {
 
         Location locationStartPoint = new Location("point A");
 
-//        locationStartPoint.setLatitude(latA);
-//        locationStartPoint.setLongitude(lngA);
+
 
         Location locationEndPoint = new Location("point B");
-//
-//        locationEndPoint.setLatitude(latB);
-//        locationEndPoint.setLongitude(lngB);
 
 
         int exerciseId = 0, activityId = 0;
@@ -154,30 +152,28 @@ public class MovementDetailsActivity extends AppCompatActivity {
         locationEndPoint.setLatitude(Double.parseDouble(latLngList.get(0)));
         locationEndPoint.setLongitude(Double.parseDouble(latLngList.get(1)));
 
-        //test github what is this
 
 
         int recordGrainSplitter = 1;//time interval for which logs to be generated. In secs.
 
-        int markerPointsCount = (int) (exerciseLogList.size()*0.05);//x% of total points
-        markerPointsCount=30;
-        if(markerPointsCount<0)markerPointsCount=1;
-        int markerArrayIndex = 0, markerArraySize = 0;
+        int markerPointsCount = 30;
+        int markerArrayIndex = 0;
+
+        if(markerPointsCount>exerciseLogList.size())
+        {
+            markerPointsCount=exerciseLogList.size();
+        }
+        Log.d("ArrSize", "markerPointsCount : " +markerPointsCount);
+
         Log.d("ArrSize", "exerciseLogList.size :" + exerciseLogList.size());
-//        Log.d("ArrSize", "markerPointsCount :" + markerPointsCount);
 
-//        Log.d("ArrSize", "exerciseLogList.size()%markerPointsCount+1 :" + exerciseLogList.size() % markerPointsCount );
-//
+        Log.d("ArrSize", "markerPointsCount : " +markerPointsCount);
+        markerLatLngList = new String[markerPointsCount];
 
-        Log.d("ArrSize", "exerciseLogList.size() : "+String.valueOf(exerciseLogList.size())) ;
-        markerArraySize =markerPointsCount;
-        Log.d("ArrSize", "(markerArraySize:)" +markerArraySize);
-        markerLatLngList = new String[markerArraySize];
-
-        markerTimeStampList = new String[markerArraySize];
+        markerTimeStampList = new String[markerPointsCount];
         polylineLatLngList = new String[exerciseLogList.size()-1];
 
-//Initialize start point - sample git test:123: checkedout SkLocaldev branch: 19:11update2
+//Initialize start point
         latLngList = Arrays.asList(exerciseLogList.get(0)._lat_lng.split(","));
         locationStartPoint.setLatitude(Double.parseDouble(latLngList.get(0)));
         locationStartPoint.setLongitude(Double.parseDouble(latLngList.get(1)));
@@ -190,7 +186,10 @@ public class MovementDetailsActivity extends AppCompatActivity {
         for (int i = 1; i < exerciseLogList.size(); i++) {
             //Values to be passed as intents
 
+        Log.d("Location", "Location log accuracy:"+String.valueOf(exerciseLogList.get(i)._lat_lng_accuracy));
 
+
+            Log.d("Location","Location log time:"+ String.valueOf(exerciseLogList.get(i)._lat_lng_time));
             latLngList = Arrays.asList(exerciseLogList.get(i)._lat_lng.split(","));
 //                    Log.d("Location","latLngList[0]"+ latLngList.get(0));
 //                    Log.d("Location","latLngList[1]"+ latLngList.get(1));
@@ -244,14 +243,22 @@ public class MovementDetailsActivity extends AppCompatActivity {
                 start_ts = Timestamp.valueOf(exerciseLogList.get(i)._creation_ts);
             polylineLatLngList[i-1]=exerciseLogList.get(i)._lat_lng;
 
-            Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  exerciseLogList.size()/ markerPointsCount:"+ exerciseLogList.size()/ markerPointsCount);
+            Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  exerciseLogList.size()-1/ markerPointsCount:"+ exerciseLogList.size()/ markerPointsCount
+                    + "  exerciseLogList.size()-1:" +   exerciseLogList.size()
+                    + "  markerPointsCount: " +   markerPointsCount
+//                    + "  i% ((exerciseLogList.size()-1)/ markerPointsCount): " +   i% ((exerciseLogList.size()-1)/ markerPointsCount)
+            );
+
+
                 //set markers for map only for limited points
-                if (i% ((exerciseLogList.size()-1)/ markerPointsCount)==0  &&markerArrayIndex<=markerArraySize) {
+                if (i% ((exerciseLogList.size()-1)/ markerPointsCount)==0  &&markerArrayIndex<=markerPointsCount-1) {
+//            if (i%  markerPointsCount==0  &&markerArrayIndex<=markerPointsCount) {
+
 
                     Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  markerArrayIndex:" +markerArrayIndex+" : "+ exerciseLogList.get(i)._lat_lng);
 //                    Log.d("LOCATIONDEBUG", "markerArrayIndex : " + markerArrayIndex);
                     markerLatLngList[markerArrayIndex] = exerciseLogList.get(i)._lat_lng;
-                    markerTimeStampList[markerArrayIndex] = exerciseLogList.get(i)._creation_ts;
+                    markerTimeStampList[markerArrayIndex] = String.valueOf(exerciseLogList.get(i)._lat_lng_accuracy);
                     markerArrayIndex++;
                 }
 
