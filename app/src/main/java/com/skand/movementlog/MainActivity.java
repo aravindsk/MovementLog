@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         latLng = (TextView) findViewById(R.id.textViewLatLng);
 
         permissions.add(ACCESS_FINE_LOCATION);
-        permissions.add(ACCESS_COARSE_LOCATION);
+        //permissions.add(ACCESS_COARSE_LOCATION);
 
         permissionsToRequest = findUnAskedPermissions(permissions);
         //get the permissions we have asked for before but are not granted..
@@ -338,12 +338,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d("Location", "onConnected:");
-        Log.d("LOCATION","ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION : "+ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION));
-        Log.d("LOCATION","ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) : "+ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION));
-
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+              //  && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
 
          ) {
             // TODO: Consider calling
@@ -354,8 +350,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
 
-            Log.d("LOCATION","inside IF :ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION : "+ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION));
-            Log.d("LOCATION","inside IF :ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) : "+ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION));
             return;
         }
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -429,7 +423,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                //&& ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+
+        ) {
             Toast.makeText(getApplicationContext(), "Enable Permissions", Toast.LENGTH_LONG).show();
             Log.d("Location", "startLocationUpdates: IF TOAST");
         }
