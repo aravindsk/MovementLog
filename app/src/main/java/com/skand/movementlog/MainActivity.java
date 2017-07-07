@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Initialization for Countdowntimer variables
     long remainingSecs, startingSecs ;
     int acitivityIterator = 0, flgResetTimerStart = 1, flgNewExercise=1, newActivityId=0,newExerciseId=0;
-    int[] intArray = new int[]{3600000, 1800000, 900000}; //long time for TESTING
-//    int[] intArray = new int[]{15000, 10000, 5000}; //short time for DEV
+//    int[] intArray = new int[]{3600000, 1800000, 900000}; //long time for TESTING
+    int[] intArray = new int[]{15000, 10000, 5000}; //short time for DEV
     String exerActivityArray[] = {"Walk", "Jog", "Walk"};
     String currExerActivity,timeForDisplay,timeForDB;
 
@@ -198,9 +198,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             public void onFinish() {
 
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 // Vibrate for 400 milliseconds
-                v.vibrate(400);
+                vib.vibrate(400);
                 flgResetTimerStart=1;
                 counterExecuteManager();
 
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonStartMove:
                 // do your code
 
-
+                stopButton.setEnabled(true);
                 if (((String) startButton.getText()).equals("Start")) {
                     //If new exercise get new exercise ID from db
                     if(flgNewExercise==1) {
@@ -275,11 +275,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonStopMove:
                 Log.d("StopBtn","clicked : flgNewExercise :"+flgNewExercise);
                 startButton.setText("Start");
+                stopButton.setEnabled(false);
                 flgNewExercise = 1;
                 flgResetTimerStart=1;
                 acitivityIterator=0;
                 final TextView mTextFieldRemTime = (TextView) findViewById(R.id.textViewRemTime);
                 final TextView mTextFieldMoveType = (TextView) findViewById(R.id.textViewMovementType);
+                //reset progress bar to current Max
+                progressBarCircleMove.setProgress(progressBarCircleMove.getMax());
+
 
                 mTextFieldRemTime.setText("Press START");
                 mTextFieldMoveType.setText("");

@@ -22,9 +22,11 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:enabled="false"
         android:text="Stop"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:enabled="false" />
 
     <ProgressBar
         android:id="@+id/progressBarMove"
