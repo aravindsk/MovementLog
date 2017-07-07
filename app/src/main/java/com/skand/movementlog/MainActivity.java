@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 5000;  /* 15 secs */
-    private long FASTEST_INTERVAL = 5000; /* 5 secs */
+    private long UPDATE_INTERVAL = 1000;  /* 15 secs */ /*Such short intervals could affect battery life. Updated for better tracking*/
+    private long FASTEST_INTERVAL = 1000; /* 5 secs */
 
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
@@ -394,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currLat= location.getLatitude();
             currLng=location.getLongitude() ;
             currLocationAccuracy = location.getAccuracy();
+            Log.d("LOCATION","Latitude : " + location.getLatitude() + " , Longitude : " + location.getLongitude());
             Log.d("LOCATION","mLocation.getAccuracy() : "+mLocation.getAccuracy()+"@"+location.getTime());
         }
 
@@ -464,6 +465,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (String perms : permissionsToRequest) {
                     if (!hasPermission(perms)) {
                         permissionsRejected.add(perms);
+
+                        Log.d("Location", "permissionsRejected:"+perms);
                     }
                 }
 
@@ -472,6 +475,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                            Log.d("Location", "shouldShowRequestPermissionRationale:"+permissionsRejected.get(0));
                             showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
                                     new DialogInterface.OnClickListener() {
                                         @Override
