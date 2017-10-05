@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currLng=location.getLongitude() ;
             currLocationAccuracy = location.getAccuracy();
             Log.d("LOCATION","Latitude : " + location.getLatitude() + " , Longitude : " + location.getLongitude());
-            Log.d("LOCATION","mLocation.getAccuracy() : "+mLocation.getAccuracy()+"@"+location.getTime());
+            Log.d("LOCATION","mLocation.getAccuracy() : "+location.getAccuracy()+"@"+location.getTime());
         }
 
 
