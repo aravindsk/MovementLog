@@ -53,19 +53,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Initialization for Countdowntimer variables
     long remainingSecs, startingSecs ;
     int acitivityIterator = 0, flgResetTimerStart = 1, flgNewExercise=1, newActivityId=0,newExerciseId=0;
-//    int[] intArray = new int[]{3600000, 1800000, 900000}; //long time for TESTING
-    int[] intArray = new int[]{15000, 10000, 5000}; //short time for DEV
+    int[] intArray = new int[]{3600000, 1800000, 900000}; //long time for TESTING
+    //int[] intArray = new int[]{45000, 10000, 5000}; //short time for DEV
     String exerActivityArray[] = {"Walk", "Jog", "Walk"};
     String currExerActivity,timeForDisplay,timeForDB;
 
 
     //Initialization for Location variables
     double currLat,currLng;
-    float currLocationAccuracy;
+    float currLocationAccuracy,distanceCovered;
     String currLocation;
 
 
-    Location mLocation;
+    Location mLocation, prevLocation;
     TextView latLng;
     GoogleApiClient mGoogleApiClient;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -107,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final TextView mTextFieldRemTime = (TextView) findViewById(R.id.textViewRemTime);
         final TextView mTextFieldMoveType = (TextView) findViewById(R.id.textViewMovementType);
+        final TextView mTextFieldDistanceCovered = (TextView) findViewById(R.id.textViewDistanceCovered);
 
+        mTextFieldDistanceCovered.setText("0");
         mTextFieldRemTime.setText("Press START");
         mTextFieldMoveType.setText("");
 
@@ -146,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         final TextView mTextFieldRemTime = (TextView) findViewById(R.id.textViewRemTime);
         final TextView mTextFieldMoveType = (TextView) findViewById(R.id.textViewMovementType);
+        final TextView mTextFieldDistanceCovered = (TextView) findViewById(R.id.textViewDistanceCovered);
+
+
 
         mTextFieldRemTime.setText("startTimer() : startingSecs : " + startingSecs);
         mTextFieldMoveType.setText(currExerActivity);
@@ -186,7 +191,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("TIME", "timeForDB" + timeForDB);
                 currLocation = String.valueOf(currLat)+","+String.valueOf(currLng);
 
+                //if new location is received, calculated and update distance covered
+                if(prevLocation!=mLocation)
+                {
+                    distanceCovered = distanceCovered + prevLocation.distanceTo(mLocation);
+                    prevLocation = mLocation;
 
+                    Log.d("distanceCovered", "distanceCovered" + distanceCovered);
+//                mTextFieldDistanceCovered.setText((int) distanceCovered);
+                    mTextFieldDistanceCovered.setText(String.valueOf(distanceCovered));
+                }
                 //write to db
                 db.addExerciseLog(new ExerciseLog(newExerciseId,newActivityId, timeForDB,currLocation,mLocation.getAccuracy(),mLocation.getTime(), formattedDate ));
                 //db.addExerciseLog(new ExerciseLog(currLocation, formattedDate));
@@ -229,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 acitivityIterator++;
 
             }
+            //Initialize previous location to current location
+            prevLocation=mLocation;
             startTimer();
         } else {
             mTextFieldMoveType.setText("Workout completed");
@@ -262,6 +278,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     startButton.setText("Pause");
                     flgNewExercise = 0;
+
+                    distanceCovered=0;
+
                     counterExecuteManager();
                 } else if ((String) startButton.getText() == "Pause") {
                     flgResetTimerStart = 0;
@@ -279,6 +298,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 flgNewExercise = 1;
                 flgResetTimerStart=1;
                 acitivityIterator=0;
+
+                distanceCovered=0;
+
                 final TextView mTextFieldRemTime = (TextView) findViewById(R.id.textViewRemTime);
                 final TextView mTextFieldMoveType = (TextView) findViewById(R.id.textViewMovementType);
                 //reset progress bar to current Max
@@ -357,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.d("Location", "before :if(mLocation!=null)");
+        Log.d("Location", "onConnected() is invoked.This should happen first. before :if(mLocation!=null)");
         if(mLocation==null){
             Log.d("Location", "mLocation==null");
 
@@ -370,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currLat= mLocation.getLatitude();
             currLng=mLocation.getLongitude() ;
             currLocationAccuracy = mLocation.getAccuracy();
+            Log.d("LOCATION", "mLocation!=null");
             Log.d("LOCATION","mLocation.getAccuracy() : "+mLocation.getAccuracy());
         }
 
@@ -394,10 +417,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("Location", "onLocationChanged:");
 
         if(location!=null) {
+            Log.d("LOCATION","onLocationChanged(): location!=null.");
             latLng.setText("Latitude : " + location.getLatitude() + " , Longitude : " + location.getLongitude());
             currLat= location.getLatitude();
             currLng=location.getLongitude() ;
             currLocationAccuracy = location.getAccuracy();
+            mLocation=location;
+
+
+
             Log.d("LOCATION","Latitude : " + location.getLatitude() + " , Longitude : " + location.getLongitude());
             Log.d("LOCATION","mLocation.getAccuracy() : "+location.getAccuracy()+"@"+location.getTime());
         }

@@ -156,7 +156,7 @@ public class MovementDetailsActivity extends AppCompatActivity {
 
         int recordGrainSplitter = 1;//time interval for which logs to be generated. In secs.
 
-        int markerPointsCount = 30;
+        int markerPointsCount =5;
         int markerArrayIndex = 0;
 
         if(markerPointsCount>exerciseLogList.size())
@@ -181,7 +181,7 @@ public class MovementDetailsActivity extends AppCompatActivity {
 
         //get start time of exercise. End time will be in end_ts. start_ts gets updated for each activity, hence this var.
         exer_start_ts = start_ts;
-//        Log.d("ArrSize", "markerLatLngList.length :" + markerLatLngList.length);
+        Log.d("ArrSize", "markerLatLngList.length :" + markerLatLngList.length);
 //        Log.d("ArrSize", "markerArraySize :" + markerArraySize);
         for (int i = 1; i < exerciseLogList.size(); i++) {
             //Values to be passed as intents
@@ -242,16 +242,18 @@ public class MovementDetailsActivity extends AppCompatActivity {
                 locationStartPoint.setLongitude(Double.parseDouble(latLngList.get(1)));
                 start_ts = Timestamp.valueOf(exerciseLogList.get(i)._creation_ts);
             polylineLatLngList[i-1]=exerciseLogList.get(i)._lat_lng;
+int x =  exerciseLogList.size() -1;
+            Log.d("LOCATIONDEBUG", "Set marker point : " + i + //"  exerciseLogList.size()-1/ markerPointsCount:"+ exerciseLogList.size()/ markerPointsCount
+                    "  exerciseLogList.size()-1 :"+ exerciseLogList.size()
+                    + "  markerPointsCount : "+ markerPointsCount
 
-            Log.d("LOCATIONDEBUG", "Set marker point : " + i + "  exerciseLogList.size()-1/ markerPointsCount:"+ exerciseLogList.size()/ markerPointsCount
-                    + "  exerciseLogList.size()-1:" +   exerciseLogList.size()
-                    + "  markerPointsCount: " +   markerPointsCount
 //                    + "  i% ((exerciseLogList.size()-1)/ markerPointsCount): " +   i% ((exerciseLogList.size()-1)/ markerPointsCount)
             );
 
 
                 //set markers for map only for limited points
-                if (i% ((exerciseLogList.size()-1)/ markerPointsCount)==0  &&markerArrayIndex<=markerPointsCount-1) {
+                if ( i% ((exerciseLogList.size()-1)/ markerPointsCount)==0  &&
+                        markerArrayIndex<=markerPointsCount-1) {
 //            if (i%  markerPointsCount==0  &&markerArrayIndex<=markerPointsCount) {
 
 

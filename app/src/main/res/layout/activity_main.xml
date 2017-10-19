@@ -78,10 +78,41 @@
         android:id="@+id/buttonVwExerDets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="70dp"
         android:onClick="viewExerciseDetails"
         android:text="View Exercise Details"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDistanceCovered"
+        app:layout_constraintHorizontal_bias="0.502" />
+
+    <TextView
+        android:id="@+id/textViewDistanceCovered"
+        android:layout_width="202dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="44dp"
+        android:text="0"
+        android:textAlignment="viewEnd"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintHorizontal_bias="0.892"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textViewDistanceCoveredUnits"
+        app:layout_constraintTop_toBottomOf="@+id/textViewLatLng" />
+
+    <TextView
+        android:id="@+id/textViewDistanceCoveredUnits"
+        android:layout_width="71dp"
+        android:layout_height="38dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="52dp"
+        android:text="metres"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLatLng" />
 </android.support.constraint.ConstraintLayout>
