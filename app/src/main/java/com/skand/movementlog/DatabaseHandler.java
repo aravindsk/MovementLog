@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     // Database Name
     private static final String DATABASE_NAME = "c25k";
@@ -34,7 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_ACTIVITY_TS = "activity_ts";
     private static final String KEY_LAT_LNG = "lat_lng";
     private static final String KEY_CREATION_TS = "creation_ts";
-
+    private static final String KEY_LAT_LNG_ACCURACY = "lat_lng_accuracy";
+    private static final String KEY_LAT_LNG_TIME = "lat_lng_time";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +51,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ACTIVITY_ID + " INTEGER , "
                 + KEY_ACTIVITY_TS + " TEXT,"
                 + KEY_LAT_LNG + " TEXT, "
+                + KEY_LAT_LNG_ACCURACY + " INTEGER, "
+                + KEY_LAT_LNG_TIME + " INTEGER, "
                 + KEY_CREATION_TS + " TEXT"
                 + ")";
         db.execSQL(CREATE_ACTIVITY_LOG_TABLE);
@@ -79,6 +82,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_ACTIVITY_ID, exerciseLog.getActivity_id());
         values.put(KEY_ACTIVITY_TS, exerciseLog.getActivity_ts());
         values.put(KEY_LAT_LNG, exerciseLog.getLatLng());
+        values.put(KEY_LAT_LNG_ACCURACY, exerciseLog.getLatLngAccuracy());
+        values.put(KEY_LAT_LNG_TIME, exerciseLog.getLatLngTime());
+
         values.put(KEY_CREATION_TS, exerciseLog.getCreation_Ts());
 
         // Inserting Row
@@ -95,13 +101,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_ACTIVITY_LOG, new String[]{KEY_ID, KEY_EXERCISE_ID,KEY_ACTIVITY_ID,
-                        KEY_ACTIVITY_TS, KEY_LAT_LNG, KEY_CREATION_TS}, KEY_ACTIVITY_ID + "=?",
+                        KEY_ACTIVITY_TS, KEY_LAT_LNG,KEY_LAT_LNG_ACCURACY,KEY_LAT_LNG_TIME, KEY_CREATION_TS}, KEY_ACTIVITY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         ExerciseLog exerciseLog = new ExerciseLog(Integer.parseInt(cursor.getString(0)),
-                Integer.parseInt(cursor.getString(1)), Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+                Integer.parseInt(cursor.getString(1)), Integer.parseInt(cursor.getString(2)), cursor.getString(3), cursor.getString(4),
+                Integer.parseInt(cursor.getString(5)), Integer.parseInt(cursor.getString(6)),
+                cursor.getString(7));
         // return contact
         return exerciseLog;
 
@@ -144,7 +152,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
         List<ExerciseLog> exerciseLogList = new ArrayList<ExerciseLog>();
-        // Select All Query
+        // Select All Query : remove * and put column list for better code clarity
         String selectQuery = "SELECT  * FROM " + TABLE_ACTIVITY_LOG+" where exercise_id = "+String.valueOf( exercise_id);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -161,7 +169,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 exerciseLog.setActivity_id(Integer.parseInt(cursor.getString(2)));
                 exerciseLog.setActivity_ts(cursor.getString(3));
                 exerciseLog.setLatLng(cursor.getString(4));
-                exerciseLog.setCreation_Ts(cursor.getString(5));
+                exerciseLog.setLatLngAccuracy(Float.parseFloat(cursor.getString(5)));
+                exerciseLog.setLatLngTime(Long.parseLong(cursor.getString(6)));
+                exerciseLog.setCreation_Ts(cursor.getString(7));
                 // Adding contact to list
                 exerciseLogList.add(exerciseLog);
             } while (cursor.moveToNext());
